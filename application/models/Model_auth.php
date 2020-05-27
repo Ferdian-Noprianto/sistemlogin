@@ -38,7 +38,7 @@ class Model_auth extends CI_Model
             redirect('auth');
         }
     }
-    public function register()
+    public function register($token)
     {
         $data = [
             'name'  => htmlspecialchars($this->input->post('name', true)),
@@ -46,10 +46,18 @@ class Model_auth extends CI_Model
             'image' => 'default.jpg',
             'password' => password_hash($this->input->post('password1'), PASSWORD_DEFAULT),
             'role_id' => 2,
-            'is_active' => 1,
+            'is_active' => 0,
+            'date_created' => time()
+        ];
+
+
+        $user_token = [
+            'email' => $this->input->post('email', true),
+            'token' => $token,
             'date_created' => time()
         ];
 
         $this->db->insert('user', $data);
+        $this->db->insert('user_token', $user_token);
     }
 }
