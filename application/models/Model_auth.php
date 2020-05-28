@@ -60,4 +60,24 @@ class Model_auth extends CI_Model
         $this->db->insert('user', $data);
         $this->db->insert('user_token', $user_token);
     }
+
+    public function forgotpassword($token)
+    {
+        $user_token = [
+            'email' => $this->input->post('email', true),
+            'token' => $token,
+            'date_created' => time()
+        ];
+        $this->db->insert('user_token', $user_token);
+    }
+
+    public function changepassword($password, $email)
+    {
+
+        $this->db->set('password', $password);
+        $this->db->where('email', $email);
+        $this->db->update('user');
+
+        $this->db->delete('user_token', ['email' => $email]);
+    }
 }
